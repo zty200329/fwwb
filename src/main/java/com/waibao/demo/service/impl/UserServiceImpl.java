@@ -166,6 +166,38 @@ public class UserServiceImpl implements UserService {
         return ResultVOUtil.success();
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public ResultVO addAdmin(UserRegisterForm registerForm) {
+        User test = userMapper.selectByUserName(registerForm.getUsername());
+        if (test != null) {
+            return ResultVOUtil.error(ResultEnum.USER_HAS_EXIST);
+        }
+        Company company1 = companyMapper.selectByCompanyName(registerForm.getCompany());
+        if(company1 == null){
+            return ResultVOUtil.error(ResultEnum.COMPANY_NOT_EXIST);
+        }
+        if(!registerForm.getCompanyPassword().equals(company1.getCompanyPassword())){
+            return ResultVOUtil.error(ResultEnum.COMPANY_PASSWORD_ERROR);
+        }
+
+        User user = new User();
+        BeanUtils.copyProperties(registerForm, user);
+
+        user.setRole(1);
+        user.setPassword(passwordEncoder.encode(registerForm.getPassword()));
+        log.info("用户信息" + user);
+        int result = userMapper.insert(user);
+        UserCompany userCompany = new UserCompany();
+        userCompany.setCompanyId(company1.getId());
+        assert test != null;
+        userCompany.setUserId(user.getId());
+        userCompanyMapper.insert(userCompany);
+        if (result != 1) {
+            return ResultVOUtil.error(ResultEnum.SQL_ERROR);
+        }
+        return ResultVOUtil.success();
+    }
 
 
 }

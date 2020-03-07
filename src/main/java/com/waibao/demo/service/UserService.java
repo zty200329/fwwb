@@ -29,6 +29,14 @@ public interface UserService {
     ResultVO addUser(UserRegisterForm registerForm);
 
     /**
+     * 增加用户
+     *
+     * @param registerForm
+     * @return
+     */
+    ResultVO addAdmin(UserRegisterForm registerForm);
+
+    /**
      * 获取当前用户
      *
      * @return

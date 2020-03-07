@@ -50,15 +50,15 @@ public class IpCameraServiceImpl implements IpCameraService {
 
     @Override
     public ResultVO showList() {
-        if(redisUtil.get(key)==null){
+//        if(redisUtil.get(key)==null){
             List<IpCamera> ipCameras = ipCameraMapper.selectAll();
-            redisUtil.set(key,ipCameras);
+//            redisUtil.set(key,ipCameras);
             log.info("mysql查找");
             return ResultVOUtil.success(ipCameras);
-        }else {
-            List<IpCamera> ipCameras = (List<IpCamera>) redisUtil.get(key);
-            log.info("redis查找");
-            return ResultVOUtil.success(ipCameras);
-        }
+//        }else {
+//            List<IpCamera> ipCameras = (List<IpCamera>) redisUtil.get(key);
+//            log.info("redis查找");
+//            return ResultVOUtil.success(ipCameras);
+//        }
     }
 }

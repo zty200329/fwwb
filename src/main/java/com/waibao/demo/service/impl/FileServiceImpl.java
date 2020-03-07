@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.ws.handler.LogicalHandler;
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,9 +50,19 @@ public class FileServiceImpl implements FileService {
             log.info(url+"picture/"+file.getName());
             log.info("-----------------------------");
         }
+
         return ResultVOUtil.success(pictureVOList);
     }
 
+    public static void main(String[] args) {
+        File f = new File("/home/zty/fwwb/yoloV3_tiny/result/picture/");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        long time = f.lastModified();
+        cal.setTimeInMillis(time);
+        String s = formatter.format(cal.getTime());
+        System.out.println(s);
+    }
     @Override
     public ResultVO showVideo() {
         ArrayList<File> list = FileUtil.getListFiles(videoPath);
@@ -66,7 +78,6 @@ public class FileServiceImpl implements FileService {
             log.info(url+"video/"+file.getName());
             log.info("-----------------------------");
         }
-        videoBackVOS.remove(videoBackVOS.size()-1);
         return ResultVOUtil.success(videoBackVOS);
     }
 }

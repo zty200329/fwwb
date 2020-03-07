@@ -28,15 +28,21 @@ public class UserController {
     private UserService userService;
 
     @ApiOperation("登录")
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResultVO login(LoginForm loginForm, HttpServletResponse response){
         return userService.login(loginForm,response);
     }
 
-    @ApiOperation("用户注册")
-    @GetMapping("/register")
+    @ApiOperation("注册普通用户")
+    @PostMapping("/register")
     public ResultVO userRegister(UserRegisterForm registerForm){
         return userService.addUser(registerForm);
+    }
+
+    @ApiOperation("注册管理员用户")
+    @PostMapping("/registerAdmin")
+    public ResultVO adminRegister(UserRegisterForm registerForm){
+        return userService.addAdmin(registerForm);
     }
 
     @ApiOperation("添加公司")

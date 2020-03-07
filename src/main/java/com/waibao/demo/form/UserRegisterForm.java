@@ -18,4 +18,5 @@ public class UserRegisterForm {
     private String company;
 
     private String companyPassword;
+
 }
