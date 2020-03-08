@@ -1,8 +1,8 @@
 server:
-  port: 8081
+  port: 8080
 filepath:
-  video: /home/zty/fwwb/yoloV3_tiny/result/video/
-  picture: /home/zty/fwwb/yoloV3_tiny/result/picture/
+  video: /home/fwwb/result/video/
+  picture: /home/fwwb/result/picture
 spring:
   servlet:
     multipart:
@@ -13,7 +13,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456
-    url: jdbc:mysql://10:3306/fwwb?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
+    url: jdbc:mysql://106.15.248.34:3306/fwwb?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=CONVERT_TO_NULL
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # 初始化大小，最小，最大

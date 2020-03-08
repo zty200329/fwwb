@@ -71,7 +71,7 @@ public class FileServiceImpl implements FileService {
 
         return ResultVOUtil.success();
     }
-    
+
     @Override
     public ResultVO showVideo() {
         ArrayList<File> list = FileUtil.getListFiles(videoPath);
