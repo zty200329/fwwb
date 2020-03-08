@@ -1,6 +1,7 @@
 package com.waibao.demo.service.impl;
 
 import com.waibao.demo.service.FileService;
+import com.waibao.demo.service.WebSocketServer;
 import com.waibao.demo.util.FileUtil;
 import com.waibao.demo.util.ResultVOUtil;
 import com.waibao.demo.vo.PictureBackVO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.ws.handler.LogicalHandler;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,35 +36,42 @@ public class FileServiceImpl implements FileService {
     @Value("${filepath.picture}")
     private String picturePath;
 
-    private String url = "http://zty200329.nat300.top/";
+    private String url = "http://47.115.7.163:8080/";
     @Override
     public ResultVO showPicture() {
-        List<PictureBackVO> pictureVOList = new ArrayList();
-        ArrayList<File> list = FileUtil.getListFiles(picturePath);
+        File f = new File(picturePath);
+        Calendar cal = Calendar.getInstance();
+        //获取文件夹最后修改时间
+        long time = f.lastModified();
+        //单位是毫秒
+        long thisTime = System.currentTimeMillis();
 
-        for (File file : list) {
-            PictureBackVO pictureBackVO = new PictureBackVO();
-            pictureBackVO.setFileName(file.getName());
-            pictureBackVO.setPictureUrl(url+"picture/"+file.getName());
-            pictureBackVO.setLastDate(file.lastModified());
-            pictureVOList.add(pictureBackVO);
-            log.info(file.getName());
-            log.info(url+"picture/"+file.getName());
-            log.info("-----------------------------");
+        long realTime = thisTime - time;
+        if(realTime < 999999999) {
+
+            List<PictureBackVO> pictureVOList = new ArrayList();
+            ArrayList<File> list = FileUtil.getListFiles(picturePath);
+
+            for (File file : list) {
+                PictureBackVO pictureBackVO = new PictureBackVO();
+                pictureBackVO.setFileName(file.getName());
+                pictureBackVO.setPictureUrl(url + "picture/" + file.getName());
+                pictureBackVO.setLastDate(file.lastModified());
+                pictureVOList.add(pictureBackVO);
+                log.info(file.getName());
+                log.info(url + "picture/" + file.getName());
+                try {
+                    WebSocketServer.sendInfo(pictureBackVO.getPictureUrl(),null);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                log.info("-----------------------------");
+            }
         }
 
-        return ResultVOUtil.success(pictureVOList);
+        return ResultVOUtil.success();
     }
-
-    public static void main(String[] args) {
-        File f = new File("/home/zty/fwwb/yoloV3_tiny/result/picture/");
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        long time = f.lastModified();
-        cal.setTimeInMillis(time);
-        String s = formatter.format(cal.getTime());
-        System.out.println(s);
-    }
+    
     @Override
     public ResultVO showVideo() {
         ArrayList<File> list = FileUtil.getListFiles(videoPath);

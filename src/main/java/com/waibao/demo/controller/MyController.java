@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
+import java.util.Date;
 
 @Controller
 public class MyController {
@@ -22,11 +23,12 @@ public class MyController {
     }
     //推送数据接口
     @ResponseBody
-    @Scheduled(fixedRate = 1000)
+//    @Scheduled(fixedRate = 1000)
     @RequestMapping("/socket/push/{cid}")
     public String pushToWeb() {
         String cid = "1";
-        String message = "test";
+        Date date = new Date();
+        String message = "test------------"+date;
 
         try {
             WebSocketServer.sendInfo(message,cid);
